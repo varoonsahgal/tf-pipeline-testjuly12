@@ -23,6 +23,6 @@ stages:
         scriptLocation: 'inlineScript'
         workingDirectory: '$(System.DefaultWorkingDirectory)'  # Make sure your .tf files are here
         inlineScript: |
-          terraform init
+          terraform init -reconfigure
           terraform plan -out=tfplan
           terraform apply -auto-approve tfplan
