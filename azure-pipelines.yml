@@ -1,0 +1,28 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  TF_VERSION: '1.6.0'
+
+stages:
+- stage: Terraform
+  jobs:
+  - job: tf
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: $(TF_VERSION)
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'varoon-july12-sc'   # 👈 Use your actual service connection name
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'  # Make sure your .tf files are here
+        inlineScript: |
+          terraform init
+          terraform plan -out=tfplan
+          terraform apply -auto-approve tfplan
