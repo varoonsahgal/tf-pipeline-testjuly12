@@ -18,11 +18,16 @@ stages:
 
     - task: AzureCLI@2
       inputs:
-        azureSubscription: 'varoon-july12-sc'   # 👈 Use your actual service connection name
+        azureSubscription: 'DataCouch (d52a6d4f-8a6b-4e23-a011-dbb0c8d7eddc)'   # ✅ Optional if you're using ARM_* instead
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        workingDirectory: '$(System.DefaultWorkingDirectory)'  # Make sure your .tf files are here
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
         inlineScript: |
           terraform init -reconfigure
           terraform plan -out=tfplan
           terraform apply -auto-approve tfplan
+      env:
+        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+        ARM_TENANT_ID: $(ARM_TENANT_ID)
+        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
